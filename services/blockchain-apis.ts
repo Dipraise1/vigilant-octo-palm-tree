@@ -252,9 +252,9 @@ class BlockchainAPIs {
   // Get wallet transactions for BSC via Moralis Web3 Data API
   async getBSCTransactions(walletAddress: string, limit: number = 10): Promise<BlockchainTransaction[]> {
     try {
-      // Use the correct BSC chain identifier
+      // Try the correct BSC endpoint - use the address directly in the path
       const response = await axios.get(
-        `https://deep-index.moralis.io/api/v2.2/wallets/${walletAddress}/transactions?chain=bsc&limit=${limit}`,
+        `https://deep-index.moralis.io/api/v2/${walletAddress}/transactions?chain=bsc&limit=${limit}`,
         { headers: { 'X-API-Key': MORALIS_API_KEY } }
       )
 
@@ -272,7 +272,7 @@ class BlockchainAPIs {
       return transactions
     } catch (err: any) {
       console.error('Error fetching BSC transactions:', err)
-      // Return empty array instead of trying legacy endpoints
+      // Return empty array for BSC since the API seems to have issues
       return []
     }
   }
