@@ -7,7 +7,6 @@ interface RealtimeData {
   activeUsers?: number
   totalVolume?: number
   totalCashback?: number
-  totalVolume?: number
   cashbackAmount?: number
   transactionCount?: number
   lastTransaction?: string
