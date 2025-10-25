@@ -7,7 +7,7 @@ export interface EligibleUser {
   cashbackAmount: number
   lastTransaction: string
   chain: 'SOL' | 'ETH' | 'BNB'
-  status: 'active' | 'pending' | 'processed'
+  status: 'active' | 'pending' | 'processed' | 'approved' | 'paid'
   joinDate: string
 }
 
