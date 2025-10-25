@@ -252,9 +252,9 @@ class BlockchainAPIs {
   // Get wallet transactions for BSC via Moralis Web3 Data API
   async getBSCTransactions(walletAddress: string, limit: number = 10): Promise<BlockchainTransaction[]> {
     try {
-      // Try the correct BSC endpoint - use the address directly in the path
+      // Try the correct BSC endpoint format
       const response = await axios.get(
-        `https://deep-index.moralis.io/api/v2/${walletAddress}/transactions?chain=bsc&limit=${limit}`,
+        `https://deep-index.moralis.io/api/v2.2/wallets/${walletAddress}/transactions?chain=bsc&limit=${limit}`,
         { headers: { 'X-API-Key': MORALIS_API_KEY } }
       )
 
@@ -272,8 +272,29 @@ class BlockchainAPIs {
       return transactions
     } catch (err: any) {
       console.error('Error fetching BSC transactions:', err)
-      // Return empty array for BSC since the API seems to have issues
-      return []
+      // Try alternative endpoint format
+      try {
+        const altResponse = await axios.get(
+          `https://deep-index.moralis.io/api/v2/${walletAddress}/transactions?chain=bsc&limit=${limit}`,
+          { headers: { 'X-API-Key': MORALIS_API_KEY } }
+        )
+        
+        const txs = altResponse.data?.result || altResponse.data?.transactions || []
+        const transactions: BlockchainTransaction[] = txs.map((tx: any) => ({
+          hash: tx.hash,
+          from: tx.from_address || tx.from,
+          to: tx.to_address || tx.to,
+          amount: Number(tx.value || tx.value_decimal || 0) / Math.pow(10, 18),
+          timestamp: new Date((tx.block_timestamp ? Date.parse(tx.block_timestamp) : (tx.timeStamp ? Number(tx.timeStamp) * 1000 : Date.now()))).toISOString(),
+          chain: 'BNB',
+          isTaxWallet: this.isTaxWallet((tx.to_address || tx.to) || '', 'BNB')
+        }))
+        
+        return transactions
+      } catch (altErr) {
+        console.error('Alternative BSC endpoint also failed:', altErr)
+        return []
+      }
     }
   }
 
