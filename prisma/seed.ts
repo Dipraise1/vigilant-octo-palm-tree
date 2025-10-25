@@ -61,7 +61,7 @@ async function main() {
       totalVolume: 15000,
       cashbackEligible: 15000,
       cashbackAmount: 300,
-      status: 'ACTIVE',
+      status: 'ACTIVE' as const,
     },
     {
       walletAddress: '0x9876543210987654321098765432109876543210',
@@ -69,7 +69,7 @@ async function main() {
       totalVolume: 8500,
       cashbackEligible: 8500,
       cashbackAmount: 170,
-      status: 'PENDING',
+      status: 'PENDING' as const,
     },
     {
       walletAddress: '0x5555555555555555555555555555555555555555',
@@ -77,7 +77,7 @@ async function main() {
       totalVolume: 25000,
       cashbackEligible: 25000,
       cashbackAmount: 500,
-      status: 'PROCESSED',
+      status: 'PROCESSED' as const,
     },
   ]
 
