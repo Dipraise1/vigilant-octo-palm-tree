@@ -1,0 +1,115 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  walletAddress String   @unique
+  chain         String   // SOL, ETH, BNB
+  totalVolume   Decimal  @default(0)
+  cashbackEligible Decimal @default(0)
+  cashbackAmount Decimal @default(0)
+  status        UserStatus @default(ACTIVE)
+  joinDate      DateTime @default(now())
+  lastActivity  DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  transactions  Transaction[]
+  cashbacks     Cashback[]
+
+  @@map("users")
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  userWallet      String
+  amount          Decimal
+  chain           String   // SOL, ETH, BNB
+  transactionHash String   @unique
+  timestamp       DateTime
+  isTaxWallet    Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  // Relations
+  user            User     @relation(fields: [userWallet], references: [walletAddress])
+  cashback        Cashback?
+
+  @@map("transactions")
+}
+
+model Cashback {
+  id              String        @id @default(cuid())
+  userId          String
+  userWallet      String
+  amount          Decimal
+  status          CashbackStatus @default(PENDING)
+  processedAt     DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  user            User          @relation(fields: [userId], references: [id])
+  transaction     Transaction?   @relation(fields: [id], references: [id])
+
+  @@map("cashbacks")
+}
+
+model TaxWallet {
+  id              String   @id @default(cuid())
+  address         String   @unique
+  chain           String   // SOL, ETH, BNB
+  totalVolume     Decimal  @default(0)
+  transactionCount Int     @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("tax_wallets")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+enum UserStatus {
+  ACTIVE
+  PENDING
+  PROCESSED
+  SUSPENDED
+}
+
+enum CashbackStatus {
+  PENDING
+  APPROVED
+  PAID
+  REJECTED
+}
+
+enum AdminRole {
+  ADMIN
+  SUPER_ADMIN
+}
+
+
+
+
+
+
