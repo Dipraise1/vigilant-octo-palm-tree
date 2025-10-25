@@ -3,9 +3,6 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['axios']
   },
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
   async headers() {
     return [
       {
@@ -16,23 +13,6 @@ const nextConfig = {
           { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
       },
-    ]
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/api/blockchain/:path*',
-        destination: '/api/blockchain/:path*',
-      },
-    ]
-  },
-  // Production optimizations
-  compress: true,
-  poweredByHeader: false,
-  generateEtags: false,
-  // Security headers
-  async headers() {
-    return [
       {
         source: '/(.*)',
         headers: [
@@ -52,6 +32,18 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/blockchain/:path*',
+        destination: '/api/blockchain/:path*',
+      },
+    ]
+  },
+  // Production optimizations
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: false,
 }
 
 module.exports = nextConfig
