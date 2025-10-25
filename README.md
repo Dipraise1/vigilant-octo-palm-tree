@@ -111,4 +111,4 @@ docker run -p 3000:3000 --env-file .env.production apeit-dashboard
 
 ## Support
 
-For issues or questions, please check the logs and ensure all environment variables are properly configured.
+For issues or questions, please check the logs and ensure all environment variables are properly configured.# vigilant-octo-palm-tree
