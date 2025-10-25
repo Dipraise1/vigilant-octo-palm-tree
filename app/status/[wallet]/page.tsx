@@ -157,7 +157,7 @@ export default function EligibilityStatusPage() {
             <div className="text-left sm:text-right">
               <p className="text-sm text-gray-400">Chain</p>
               <p className="text-white font-semibold">
-                {status?.transactions.length > 0 ? status.transactions[0].chain : 'Unknown'}
+                {status?.transactions && status.transactions.length > 0 ? status.transactions[0].chain : 'Unknown'}
               </p>
             </div>
           </div>
@@ -282,13 +282,13 @@ export default function EligibilityStatusPage() {
                   <div className="flex justify-between">
                     <span className="text-gray-400">Last Transaction:</span>
                     <span className="text-white font-semibold">
-                      {status.transactions.length > 0 ? formatDate(status.transactions[0].timestamp) : 'No transactions'}
+                      {status?.transactions && status.transactions.length > 0 ? formatDate(status.transactions[0].timestamp) : 'No transactions'}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Chain:</span>
                     <span className="text-white font-semibold">
-                      {status.transactions.length > 0 ? status.transactions[0].chain : 'Unknown'}
+                      {status?.transactions && status.transactions.length > 0 ? status.transactions[0].chain : 'Unknown'}
                     </span>
                   </div>
                 </div>
